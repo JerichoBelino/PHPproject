@@ -53,6 +53,13 @@
 						}
 					?>
 
+  					<?php 
+						session_start();
+						if(ISSET($_SESSION['message'])){
+						echo "<center><label class='text-danger'>".$_SESSION['message']."</label></center>";
+						}
+					?>
+
 					<button>Login</button>
 				</form>
 			</div>
