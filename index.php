@@ -21,7 +21,7 @@
 <body>
     
     <h1 class="loantxt">
-        <span>Test Management</span>
+        <span>Loan Management</span>
         <span>System</span>
     </h1>
 
