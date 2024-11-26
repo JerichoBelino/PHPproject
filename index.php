@@ -11,13 +11,14 @@
 
 <!DOCTYPE html>
 <html>
+	
 <head>
 	<title>Slide Navbar</title>
 	<link rel="stylesheet" type="text/css" href="slide navbar Login.css">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
-
-
 </head>
+
+
 <body>
     
     <h1 class="loantxt">
@@ -29,38 +30,25 @@
 	<div class="main">  	
 		<input type="checkbox" id="chk" aria-hidden="true">
 
+
+    <!-- Signup -->
 			<div class="signup">
-				<form>
+				<form method="POST" action="sign_up.php">
 					<label for="chk" aria-hidden="true">Sign up</label>
-					<input type="text" name="txt" placeholder="User name" required="">
-					<input type="email" name="email" placeholder="Email" required="">
-					<input type="password" name="pswd" placeholder="Password" required="">
-					<button>Sign up</button>
+					<input type="text" name="username" placeholder="Username" required="">
+					<input type="password" name="password" placeholder="Password" required="">
+					<button type="submit" name="sign_up">Sign up</button>
 				</form>
 			</div>
 
-
+	
+    <!-- Login -->
 			<div class="login">
-				<form method="POST" action="Login.php">
+				<form method="POST" action="user_login.php">
 					<label for="chk" aria-hidden="true">Login</label>
 					<input type="text" name="username" placeholder="Username" required="required">
 					<input type="password" name="password" placeholder="Password" required="required">
-
-                    <?php 
-						session_start();
-						if(ISSET($_SESSION['message'])){
-						echo "<center><label class='text-danger'>".$_SESSION['message']."</label></center>";
-						}
-					?>
-
-  					<?php 
-						session_start();
-						if(ISSET($_SESSION['message'])){
-						echo "<center><label class='text-danger'>".$_SESSION['message']."</label></center>";
-						}
-					?>
-
-					<button>Login</button>
+					<button type="submit" name="user_login">Login</button>
 				</form>
 			</div>
 	</div>
