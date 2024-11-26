@@ -1,4 +1,4 @@
-<?php
+ <?php
 class db_connect {
     private $host = "localhost";
     private $user = "root";
