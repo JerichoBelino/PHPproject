@@ -25,7 +25,6 @@ $db = new db_class();
             <li class="nav-item"><a class="nav-link" href="admin_borrower.php"><i class="fas fa-fw fa-book"></i> Borrowers</a></li>
             <li class="nav-item"><a class="nav-link" href="admin_loan_plan.php"><i class="fas fa-fw fa-piggy-bank"></i> Loan Plans</a></li>
             <li class="nav-item"><a class="nav-link" href="admin_loan_type.php"><i class="fas fa-fw fa-money-check"></i> Loan Types</a></li>
-            <li class="nav-item"><a class="nav-link" href="user.php"><i class="fas fa-fw fa-user"></i> Users</a></li>
         </nav>
 
         <div id="content-wrapper" class="d-flex flex-column">
@@ -53,9 +52,23 @@ $db = new db_class();
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                     </div>
+                        <?php
+                            // Active Loans                   
+                            echo $get->get_active_loan();
+                        ?>
 
-                    
-                </main> </div>
+                        <?php
+                             // Payments today                    
+                            echo $get->get_total_payments();
+                        ?>
+
+                        <?php
+                            // Borrowers
+                            echo $get->get_total_borrowers();
+                        ?>
+
+                </main> 
+                </div>
             </div>
         </div>
 
@@ -81,6 +94,6 @@ $db = new db_class();
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sb-admin-2/1.0.0/js/sb-admin-2.min.js"></script>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        
     </body>
 </html>
