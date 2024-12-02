@@ -15,20 +15,18 @@ $db = new db_class();
 </head>
 <body id="page-top">
     <div id="wrapper">
-        <header>
-            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin_home.html">
-                    <div class="sidebar-brand-text mx-3">ADMIN PANEL</div>
-                </a>
-                <li class="nav-item active"><a class="nav-link" href="admin_home.php"><i class="fas fa-fw fa-home"></i> Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="admin_loan.php"><i class="fas fa-fw fas fa-comment-dollar"></i> Loans</a></li>
-                <li class="nav-item"><a class="nav-link" href="admin_payment.php"><i class="fas fa-fw fas fa-coins"></i> Payments</a></li>
-                <li class="nav-item"><a class="nav-link" href="admin_borrower.php"><i class="fas fa-fw fas fa-book"></i> Borrowers</a></li>
-                <li class="nav-item"><a class="nav-link" href="admin_loan_plan.php"><i class="fas fa-fw fa-piggy-bank"></i> Loan Plans</a></li>
-                <li class="nav-item"><a class="nav-link" href="admin_loan_type.php"><i class="fas fa-fw fa-money-check"></i> Loan Types</a></li>
-                <li class="nav-item"><a class="nav-link" href="user.php"><i class="fas fa-fw fa-user"></i> Users</a></li>
-            </ul>
-        </header>
+        <nav class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin_home.html">
+                <div class="sidebar-brand-text mx-3">ADMIN PANEL</div>
+            </a>
+            <li class="nav-item"><a class="nav-link" href="admin_home.php"><i class="fas fa-fw fa-home"></i> Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="admin_loan.php"><i class="fas fa-fw fa-comment-dollar"></i> Loans</a></li>
+            <li class="nav-item"><a class="nav-link" href="admin_payment.php"><i class="fas fa-fw fa-coins"></i> Payments</a></li>
+            <li class="nav-item"><a class="nav-link" href="admin_borrower.php"><i class="fas fa-fw fa-book"></i> Borrowers</a></li>
+            <li class="nav-item"><a class="nav-link" href="admin_loan_plan.php"><i class="fas fa-fw fa-piggy-bank"></i> Loan Plans</a></li>
+            <li class="nav-item"><a class="nav-link" href="admin_loan_type.php"><i class="fas fa-fw fa-money-check"></i> Loan Types</a></li>
+            <li class="nav-item"><a class="nav-link" href="user.php"><i class="fas fa-fw fa-user"></i> Users</a></li>
+        </nav>
 
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
@@ -52,7 +50,11 @@ $db = new db_class();
                 </nav>
 
                 <main class="container-fluid">
-                   
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                    </div>
+
+                    
                 </main> </div>
             </div>
         </div>
