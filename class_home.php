@@ -7,6 +7,16 @@
 			$this->connect();
 		}
 
+        // Welcome the username 
+        public function get_user_by_id($user_id) {
+            $stmt = $this->conn->prepare("SELECT username FROM sign_up WHERE id = :user_id");		
+            // Bind the user_id parameter to the query
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);		
+            // Execute the query or statement
+            $stmt->execute();		
+            // Fetch the result as an associative array
+            return $stmt->fetch(PDO::FETCH_ASSOC); // Return the username row
+        }
 
         // View the actie loans
         public function get_active_loan($status = 2) {
