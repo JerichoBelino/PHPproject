@@ -1,8 +1,10 @@
 <?php
+date_default_timezone_set("Etc/GMT+8");
 require_once 'session.php';
-require_once 'class.php';
-$db = new db_class(); 
+require_once 'class_home.php';
+$get = new db_home(); 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,11 +27,11 @@ $db = new db_class();
             <li class="nav-item"><a class="nav-link" href="admin_borrower.php"><i class="fas fa-fw fa-book"></i> Borrowers</a></li>
             <li class="nav-item"><a class="nav-link" href="admin_loan_plan.php"><i class="fas fa-fw fa-piggy-bank"></i> Loan Plans</a></li>
             <li class="nav-item"><a class="nav-link" href="admin_loan_type.php"><i class="fas fa-fw fa-money-check"></i> Loan Types</a></li>
+            <li class="nav-item"><a class="nav-link" href="user.php"><i class="fas fa-fw fa-user"></i> Users</a></li>
         </nav>
 
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                <!-- Logout -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" aria-label="Toggle Sidebar">
                         <i class="fa fa-bars"></i>
@@ -52,26 +54,83 @@ $db = new db_class();
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                     </div>
-                        <?php
-                            // Active Loans                   
-                            echo $get->get_active_loan();
-                        ?>
+                    <div class="row">
+                        <div class="col-xl-4 col-md-4 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Active Loans</div>
+                                            <div class="h1 mb-0 font-weight-bold text-gray-800">
+                                                <?php
+                                                // Active Loans                   
+                                                echo $get->get_active_loan();
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-fw fas fa-comment-dollar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small stretched-link" href="admin_loan.php">View Loan List</a>
+                                    <div class="small"><i class="fa fa-angle-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <?php
-                             // Payments today                    
-                            echo $get->get_total_payments();
-                        ?>
+                        <div class="col-xl-4 col-md-4 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Payments Today</div>
+                                            <div class="h1 mb-0 font-weight-bold text-gray-800">
+                                                <?php
+                                                 // Payments today                    
+                                                 echo $get->get_total_payments();
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-fw fas fa-coins fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small stretched-link" href="admin_payment.php">View Payments</a>
+                                    <div class="small"><i class="fa fa-angle-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <?php
-                            // Borrowers
-                            echo $get->get_total_borrowers();
-                        ?>
-
+                        <div class="col-xl-4 col-md-4 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Borrowers</div>
+                                            <div class="h1 mb-0 font-weight-bold text-gray-800">
+                                                <?php
+                                                // Borrowers
+                                                echo $get->get_total_borrowers();
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small stretched-link" href="admin_borrower.php">View Borrowers</a>
+                                    <div class="small"><i class="fa fa-angle-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </main> 
-                </div>
+            </div>
             </div>
         </div>
-
 
         <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
