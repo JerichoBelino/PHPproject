@@ -152,3 +152,38 @@
             </div>
         </div>
     </div>
+    <!-- Logout-->
+		<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-danger">
+						<h5 class="modal-title text-white">System Information</h5>
+						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">Are you sure you want to logout?</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+						<a class="btn btn-danger" href="logout.php">Logout</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+     <!-- Scripts -->
+	 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="js/sb-admin-2.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#dataTable').DataTable({
+				"order": [[1 , "asc" ]]
+			});
+		});
+	</script>
+</body>
+</html>
