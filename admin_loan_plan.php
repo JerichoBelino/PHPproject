@@ -1,5 +1,5 @@
 <?php
-    date_default_timezone_set("Etc/GMT+8");
+    date_default_timezone_set ("Etc/GMT+8");
     require_once 'session.php';
     require_once 'class.php';
     $db = new db_class();
@@ -81,4 +81,74 @@
                                             <thead>
                                                 <tr><th>Plan(months)</th><th>Interest(%)</th><th>Monthly Overdue Penalty(%)</th><th>Action</th></tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody>  
+                                                <!-- Display Loan PLan -->
+                                                <?php
+                                                    foreach ($db->display_lplan() as $fetch) {
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $fetch['lplan_month']; ?></td>
+                                                    <td><?php echo $fetch['lplan_interest']; ?></td>
+                                                    <td><?php echo $fetch['lplan_penalty']; ?></td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">Action</button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                <a class="dropdown-item bg-warning text-white" href="#" data-toggle="modal" data-target="#updatelplan<?php echo $fetch['lplan_id']; ?>">Edit</a>
+                                                                <a class="dropdown-item bg-danger text-white" href="#" data-toggle="modal" data-target="#deletelplan<?php echo $fetch['lplan_id']; ?>">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <!-- Delete Loan Plan -->
+                                                <div class="modal fade" id="deletelplan<?php echo $fetch['lplan_id']; ?>" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger">
+                                                                <h5 class="modal-title text-white">System Information</h5>
+                                                                <button class="close" type="button" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                                                            </div>
+                                                            <div class="modal-body">Are you sure you want to delete this record?</div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                                <a class="btn btn-danger" href="delete_lplan.php?lplan_id=<?php echo $fetch['lplan_id']; ?>">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Edit Loan Plan -->
+                                                <div class="modal fade" id="updatelplan<?php echo $fetch['lplan_id']; ?>" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <form method="POST" action="update_lplan.php">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-warning">
+                                                                    <h5 class="modal-title text-white">Edit Loan Plan</h5>
+                                                                    <button class="close" type="button" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="form-group"><label>Plan(months)</label><input type="text" class="form-control" value="<?php echo $fetch['lplan_month']; ?>" name="lplan_month" required/><input type="hidden" value="<?php echo $fetch['lplan_id']; ?>" name="lplan_id"/></div>
+                                                                    <div class="form-group"><label>Interest</label><div class="input-group"><input type="number" class="form-control" value="<?php echo $fetch['lplan_interest']; ?>" name="lplan_interest" min="0" required /><div class="input-group-prepend"><span class="input-group-text">%</span></div></div></div>
+                                                                    <div class="form-group"><label>Penalty</label><div class="input-group"><input type="number" class="form-control" value="<?php echo $fetch['lplan_penalty']; ?>" name="lplan_penalty" min="0" required /><div class="input-group-prepend"><span class="input-group-text">%</span></div></div></div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                                    <button class="btn btn-warning" name="update" type="submit">Update</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
