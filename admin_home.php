@@ -27,7 +27,6 @@ $get = new db_home();
             <li class="nav-item"><a class="nav-link" href="admin_borrower.php"><i class="fas fa-fw fa-book"></i> Borrowers</a></li>
             <li class="nav-item"><a class="nav-link" href="admin_loan_plan.php"><i class="fas fa-fw fa-piggy-bank"></i> Loan Plans</a></li>
             <li class="nav-item"><a class="nav-link" href="admin_loan_type.php"><i class="fas fa-fw fa-money-check"></i> Loan Types</a></li>
-            <li class="nav-item"><a class="nav-link" href="user.php"><i class="fas fa-fw fa-user"></i> Users</a></li>
         </nav>
 
         <div id="content-wrapper" class="d-flex flex-column">
