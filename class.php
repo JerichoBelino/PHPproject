@@ -148,7 +148,52 @@
 			}
 			return false;
 		}
-
+// Function for Loan Plan
+public function save_lplan($lplan_month, $lplan_interest, $lplan_penalty) {
+	// Prepare the query 
+	$query = $this->conn->prepare("INSERT INTO loan_plan (lplan_month, lplan_interest, lplan_penalty) VALUES (:lplan_month, :lplan_interest, :lplan_penalty)");
+	// Binding Parameters
+	$query->bindParam(':lplan_month', $lplan_month, PDO::PARAM_INT);
+	$query->bindParam(':lplan_interest', $lplan_interest, PDO::PARAM_STR);
+	$query->bindParam(':lplan_penalty', $lplan_penalty, PDO::PARAM_STR);		
+	// Execute the query
+	if ($query->execute()) {
+		return true;
+	}	
+	return false;
+}
+// Display
+public function display_lplan() {
+	// Prepare the query 
+	$query = $this->conn->prepare("SELECT * FROM loan_plan");		
+	$query->execute();		
+	return $query->fetchAll(PDO::FETCH_ASSOC);
+}
+// Delete
+public function delete_lplan($lplan_id) {
+	// Prepare the query
+	$query = $this->conn->prepare("DELETE FROM loan_plan WHERE lplan_id = :lplan_id");		
+	$query->bindParam(':lplan_id', $lplan_id, PDO::PARAM_INT);		
+	if ($query->execute()) {
+		return true;
+	} else {
+		return false; 
+	}
+}
+// Update
+public function update_lplan($lplan_id, $lplan_month, $lplan_interest, $lplan_penalty) {
+	// Prepare the query 
+	$query = $this->conn->prepare("UPDATE loan_plan SET lplan_month = :lplan_month, lplan_interest = :lplan_interest, lplan_penalty = :lplan_penalty WHERE lplan_id = :lplan_id");
+	$query->bindParam(':lplan_month', $lplan_month, PDO::PARAM_STR);
+	$query->bindParam(':lplan_interest', $lplan_interest, PDO::PARAM_INT);
+	$query->bindParam(':lplan_penalty', $lplan_penalty, PDO::PARAM_INT);
+	$query->bindParam(':lplan_id', $lplan_id, PDO::PARAM_INT);	
+	if ($query->execute()) {
+		return true;
+	} else {
+		return false; 
+	}
+}
         
 	}
 ?>
