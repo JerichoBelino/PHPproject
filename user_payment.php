@@ -2,7 +2,11 @@
     date_default_timezone_set("Etc/GMT+8");
     require_once 'session.php';
     require_once 'class.php';
-    $db = new db_class();
+    require_once 'config.php';
+
+    $database = new db_connect();
+    $db = $database->connect();
+    $user = new db_class($db);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +45,7 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">
-                                <img class="img-profile rounded-circle" src="image/admin_profile.svg">
+                                <img class="img-profile rounded-circle" src="image/admin_logo.png">
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -69,16 +73,7 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                        $payments = $db->conn->query("SELECT * FROM `payment` INNER JOIN `loan` ON payment.loan_id=loan.loan_id");
-                                        foreach ($payments as $i => $payment) {
-                                            echo "<tr>
-                                                <td>".($i+1)."</td>
-                                                <td>{$payment['ref_no']}</td>
-                                                <td>{$payment['payee']}</td>
-                                                <td>&#8369; ".number_format($payment['pay_amount'], 2)."</td>
-                                                <td>&#8369; ".number_format($payment['penalty'], 2)."</td>
-                                            </tr>";
-                                        }
+                                       echo $user->new_payment();
                                     ?>
                                 </tbody>
                             </table>
@@ -88,7 +83,6 @@
             </div>
         </div>
     </div>
-
     <!-- Add Payment -->
     <div class="modal fade" id="addModal">
         <div class="modal-dialog">
@@ -103,7 +97,7 @@
                         <select name="loan_id" class="form-control ref_no" id="ref_no" required>
                             <option value="">Select Loan</option>
                             <?php
-                                foreach ($db->display_loan() as $loan) {
+                                foreach ($user->display_loan() as $loan) {
                                     if ($loan['status'] == 2) {
                                         echo "<option value='{$loan['loan_id']}'>{$loan['ref_no']}</option>";
                                     }
@@ -120,7 +114,6 @@
             </form>
         </div>
     </div>
-
     <!-- Logout -->
     <div class="modal fade" id="logoutModal">
         <div class="modal-dialog">
