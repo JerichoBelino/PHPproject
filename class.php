@@ -194,6 +194,64 @@ public function update_lplan($lplan_id, $lplan_month, $lplan_interest, $lplan_pe
 		return false; 
 	}
 }
-        
+ 
+// Payment Function 
+public function display_payment() {
+	// Prepare the SELECT query using PDO
+	$query = $this->conn->prepare("SELECT * FROM payment");		
+	if ($query->execute()) {
+		// Fetch the result as an associative array
+		$result = $query->fetchAll(PDO::FETCH_ASSOC);
+		return $result;
+	} else {
+		die("Error: " . $query->errorInfo()[2]);
+	}
+}
+// Also like display
+public function new_payment() {
+	// Prepare the query using PDO
+	$query = "SELECT * FROM payment INNER JOIN loan ON payment.loan_id = loan.loan_id";
+	$stmt = $this->conn->prepare($query);
+	
+	if ($stmt->execute()) {
+		// Fetch all results
+		$payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		// Output the rows
+		foreach ($payments as $i => $payment) {
+			echo "<tr>
+				<td>".($i+1)."</td>
+				<td>{$payment['ref_no']}</td>
+				<td>{$payment['payee']}</td>
+				<td>&#8369; ".number_format($payment['pay_amount'], 2)."</td>
+				<td>&#8369; ".number_format($payment['penalty'], 2)."</td>
+			</tr>";
+		}
+	}
+}
+
+// Save 
+public function save_payment($loan_id, $payee, $payment, $penalty, $overdue) {
+	try {
+		// Prepare the query using PDO
+		$query = $this->conn->prepare("INSERT INTO payment (loan_id, payee, pay_amount, penalty, overdue) VALUES (?, ?, ?, ?, ?)");	
+		// Check if the query preparation was successful
+		if (!$query) {
+			throw new Exception("Failed to prepare query: " . implode(", ", $this->conn->errorInfo()));
+		}	
+		// Bind parameters
+		$query->bindParam(1, $loan_id, PDO::PARAM_INT);
+		$query->bindParam(2, $payee, PDO::PARAM_STR);
+		$query->bindParam(3, $payment, PDO::PARAM_STR);
+		$query->bindParam(4, $penalty, PDO::PARAM_STR);
+		$query->bindParam(5, $overdue, PDO::PARAM_STR);	
+		if (!$query->execute()) {
+			throw new Exception("Query execution failed: " . implode(", ", $query->errorInfo()));
+		}		
+		return true;		
+	} catch (Exception $e) {
+		die("Error saving payment: " . $e->getMessage());
+	}
+}
+
 	}
 ?>
