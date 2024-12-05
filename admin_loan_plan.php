@@ -1,8 +1,12 @@
 <?php
-    date_default_timezone_set ("Etc/GMT+8");
+    date_default_timezone_set("Etc/GMT+8");
     require_once 'session.php';
     require_once 'class.php';
-    $db = new db_class();
+    require_once 'config.php';
+
+    $database = new db_connect();
+    $db = $database->connect();
+    $admin = new db_class($db);
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +46,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                    <img class="img-profile rounded-circle" src="image/admin_profile.svg">
+                                    <img class="img-profile rounded-circle" src="image/admin_logo.png">
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
@@ -81,10 +85,10 @@
                                             <thead>
                                                 <tr><th>Plan(months)</th><th>Interest(%)</th><th>Monthly Overdue Penalty(%)</th><th>Action</th></tr>
                                             </thead>
-                                            <tbody>  
+                                            <tbody>
                                                 <!-- Display Loan PLan -->
                                                 <?php
-                                                    foreach ($db->display_lplan() as $fetch) {
+                                                    foreach ($admin->display_lplan() as $fetch) {
                                                 ?>
                                                 <tr>
                                                     <td><?php echo $fetch['lplan_month']; ?></td>
@@ -152,7 +156,8 @@
             </div>
         </div>
     </div>
-    <!-- Logout-->
+
+		<!-- Logout-->
 		<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
