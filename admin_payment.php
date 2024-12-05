@@ -2,7 +2,11 @@
 date_default_timezone_set("Etc/GMT+8");
 require_once 'session.php';
 require_once 'class.php';
-$db = new db_class();
+require_once 'config.php';
+
+$database = new db_connect();
+$db = $database->connect();
+$admin = new db_class($db);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +55,7 @@ $db = new db_class();
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">
-                                <img class="img-profile rounded-circle" src="image/admin_profile.svg">
+                                <img class="img-profile rounded-circle" src="image/admin_logo.png">
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -79,16 +83,7 @@ $db = new db_class();
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $payments = $db->conn->query("SELECT * FROM `payment` INNER JOIN `loan` ON payment.loan_id = loan.loan_id");
-                                        foreach ($payments as $i => $payment) {
-                                            echo "<tr>
-                                                    <td>" . ($i + 1) . "</td>
-                                                    <td>{$payment['ref_no']}</td>
-                                                    <td>{$payment['payee']}</td>
-                                                    <td>&#8369; " . number_format($payment['pay_amount'], 2) . "</td>
-                                                    <td>&#8369; " . number_format($payment['penalty'], 2) . "</td>
-                                                </tr>";
-                                        }
+                                            echo $admin->new_payment();
                                         ?>
                                     </tbody>
                                 </table>
