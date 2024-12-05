@@ -6,6 +6,8 @@
     <title>Loan Management System</title>
     <link rel="stylesheet" href="css/Login.css"> <!-- Link to the CSS file -->
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="script.js"></script> <!-- Include the reusable script -->
 </head>
 
 <body>
@@ -21,11 +23,11 @@
 
             <!-- Signup -->
             <div class="signup">
-                <form method="POST" action="sign_up.php">
+                <form id="signupForm" onsubmit="return handleSignUpFormSubmission(event)">
                     <label for="chk" aria-hidden="true">Sign up</label>
-                    <input type="text" name="username" placeholder="Username" required="">
-                    <input type="password" name="password" placeholder="Password" required="">
-                    <button type="submit" name="sign_up">Sign up</button>
+                    <input type="text" id="username" name="username" placeholder="Username" required="required">
+                    <input type="password" id="password" name="password" placeholder="Password" required="required">
+                    <button class="buttons" type="submit">Sign up</button>
                 </form>
             </div>
 
@@ -35,7 +37,7 @@
                     <label for="chk" aria-hidden="true">Login</label>
                     <input type="text" name="username" placeholder="Username" required="required">
                     <input type="password" name="password" placeholder="Password" required="required">
-                    <button type="submit" name="user_login">Login</button>
+                    <button class="buttons" type="submit" name="user_login">Login</button>
                 </form>
             </div>
         </div>
@@ -43,7 +45,7 @@
 
 			<!-- Circular button for Admin Login -->
 			<a href="javascript:void(0);" class="circle-button" title="Admin Login" id="adminLoginBtn">
-				<img src="image/admin_profile.svg" alt="Admin Profile">
+				<img src="image/admin.png" alt="Admin Profile">
 			</a>
 
 		<!-- Admin Login -->
@@ -54,10 +56,11 @@
 				<form method="POST" action="admin_login.php">
 					<input type="text" name="username" placeholder="Admin Username" required="" aria-required="true">
 					<input type="password" name="password" placeholder="Admin Password" required="" aria-required="true">
-					<button type="submit" name="admin_login">Login</button>
+					<button class="buttons" type="submit" name="admin_login">Login</button>
 				</form>
 			</div>
 		</div>
+
 
 <script>
     var modal = document.getElementById("adminLoginModal");

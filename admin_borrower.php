@@ -1,8 +1,12 @@
 <?php
 date_default_timezone_set("Etc/GMT+8");
 require_once 'session.php';
-require_once 'class_borrower.php';
-$borrower = new db_borrower(); 
+require_once 'class.php';
+require_once 'config.php';
+
+$database = new db_connect();
+$db = $database->connect();
+$admin = new db_class($db);
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +86,7 @@ $borrower = new db_borrower();
                                     </thead>
                                     <tbody>
                                         <?php
-                                        foreach ($borrower->display_borrower() as $fetch) { ?>
+                                        foreach ($admin->display_borrower() as $fetch) { ?>
                                             <tr>
                                                 <td><?php echo $fetch['firstname']; ?></td>
                                                 <td><?php echo $fetch['middlename']; ?></td>
