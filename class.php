@@ -351,5 +351,58 @@
 			return false; // Return false if the query execution fails
 		}
 
+		// Display
+		public function display_loan() {
+			// Query to get the loan data with JOINs
+			$query = "SELECT loan.*, borrower.lastname, borrower.firstname, borrower.middlename, borrower.contact_no, borrower.address, loan_type.ltype_name, loan_plan.lplan_month, loan_plan.lplan_interest, loan_plan.lplan_penalty 
+					  FROM loan
+					  INNER JOIN borrower ON loan.borrower_id = borrower.borrower_id
+					  INNER JOIN loan_type ON loan.ltype_id = loan_type.ltype_id
+					  INNER JOIN loan_plan ON loan.lplan_id = loan_plan.lplan_id";
+			$stmt = $this->conn->prepare($query);
+			if ($stmt->execute()) {
+				// Fetch all results as an associative array
+				return $stmt->fetchAll(PDO::FETCH_ASSOC);
+			}
+			return false; 
+		}
+		// Display next payment
+		public function getNextPaymentDetails($loanId, $status, $monthly, $penalty) {
+			if (!isset($loanId)) {
+				return ["error" => "Invalid Loan ID."];
+			}
+			// Prepare the query to fetch payment details for the given loan ID
+			$query = "SELECT * FROM payment WHERE loan_id = :loan_id";
+			$stmt = $this->conn->prepare($query);
+			$stmt->bindParam(':loan_id', $loanId, PDO::PARAM_INT);
+			$stmt->execute();
+			// Get the number of payments already made
+			$paid = $stmt->rowCount();
+			$offset = $paid ? " OFFSET $paid" : "";
+		
+			if ($status == 2) {
+				// Prepare the query to fetch the next loan schedule based on loan ID and status
+				$nextQuery = "SELECT * FROM loan_schedule WHERE loan_id = :loan_id ORDER BY date(due_date) ASC LIMIT 1 $offset";
+				$nextStmt = $this->conn->prepare($nextQuery);
+				$nextStmt->bindParam(':loan_id', $loanId, PDO::PARAM_INT);
+				$nextStmt->execute();
+		
+				if ($nextRow = $nextStmt->fetch(PDO::FETCH_ASSOC)) {
+					$next = $nextRow['due_date'];
+					// Check if the next payment date is past due and apply penalty if necessary
+					$add = (date('Ymd', strtotime($next)) < date("Ymd")) ? $penalty : 0;
+					return [
+						"next" => $next,
+						"monthly" => $monthly,
+						"penalty" => $add,
+						"total" => $monthly + $add
+					];
+				} else {
+					return ["error" => "No upcoming payments."];
+				}
+			}
+			return ["error" => "No upcoming payments."];
+		}
+		
 	}
 ?>
