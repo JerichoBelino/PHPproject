@@ -403,6 +403,43 @@
 			}
 			return ["error" => "No upcoming payments."];
 		}
+		// Get this 4 to create loan also for update
+		public function getBorrowers() {
+			$stmt = $this->conn->query("SELECT borrower_id, lastname, firstname, middlename FROM borrower");
+			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		public function getLoanTypes() {
+			$stmt = $this->conn->query("SELECT ltype_id, ltype_name FROM loan_type");
+			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		public function getLoanPlans() {
+			$stmt = $this->conn->query("SELECT lplan_id, lplan_month, lplan_interest, lplan_penalty FROM loan_plan");
+			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		public function getStatusOptions() {
+			return [
+				0 => 'For Approval',
+				1 => 'Approved',
+				2 => 'Released',
+				4 => 'Denied'
+			];
+		}
 		
+		// View Payment Sched
+		public function getLoanSchedule($loanId) {
+			// Prepare the SQL statement to fetch the loan schedule
+			$query = "SELECT * FROM loan_schedule WHERE loan_id = :loan_id";
+			$stmt = $this->conn->prepare($query);
+			$stmt->bindParam(':loan_id', $loanId, PDO::PARAM_INT);
+			$stmt->execute();
+			// Initialize an array to hold the schedule data
+			$scheduleData = [];
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				$scheduleData[] = [
+					'due_date' => date("F d, Y", strtotime($row['due_date'])),
+				];
+			}
+			return $scheduleData;
+		}
 	}
 ?>
