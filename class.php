@@ -169,7 +169,7 @@ public function display_lplan() {
 	$query->execute();		
 	return $query->fetchAll(PDO::FETCH_ASSOC);
 }
-// Delete
+// Delete  
 public function delete_lplan($lplan_id) {
 	// Prepare the query
 	$query = $this->conn->prepare("DELETE FROM loan_plan WHERE lplan_id = :lplan_id");		
@@ -252,6 +252,52 @@ public function save_payment($loan_id, $payee, $payment, $penalty, $overdue) {
 		die("Error saving payment: " . $e->getMessage());
 	}
 }
-
+//Function for Loan Type
+public function save_ltype($ltype_name, $ltype_desc) {
+	// Prepare the query 
+	$query = $this->conn->prepare("INSERT INTO loan_type (ltype_name, ltype_desc) VALUES (:ltype_name, :ltype_desc)");
+	$query->bindParam(':ltype_name', $ltype_name, PDO::PARAM_STR);
+	$query->bindParam(':ltype_desc', $ltype_desc, PDO::PARAM_STR);		
+	if ($query->execute()) {
+		return true;
+	} else {
+		return false; 
+	}
+}
+//Display
+public function display_ltype() {
+	// Prepare the query 
+	$query = $this->conn->prepare("SELECT * FROM loan_type");
+	if ($query->execute()) {
+		return $query->fetchAll(PDO::FETCH_ASSOC);
+	} else {
+		return false; 
+	}
+}
+// Delete
+public function delete_ltype($ltype_id) {
+	// Prepare the query using PDO
+	$query = $this->conn->prepare("DELETE FROM loan_type WHERE ltype_id = :ltype_id");
+	// Bind the parameter to prevent SQL injection
+	$query->bindParam(':ltype_id', $ltype_id, PDO::PARAM_INT);
+	if ($query->execute()) {
+		return true; 
+	} else {
+		return false;
+	}
+}
+// Update
+public function update_ltype($ltype_id, $ltype_name, $ltype_desc) {
+	// Prepare the update query using PDO
+	$query = $this->conn->prepare("UPDATE loan_type SET ltype_name = :ltype_name, ltype_desc = :ltype_desc WHERE ltype_id = :ltype_id");
+	$query->bindParam(':ltype_name', $ltype_name, PDO::PARAM_STR);
+	$query->bindParam(':ltype_desc', $ltype_desc, PDO::PARAM_STR);
+	$query->bindParam(':ltype_id', $ltype_id, PDO::PARAM_INT);
+	if ($query->execute()) {
+		return true; 
+	} else {
+		return false; 
+	}
+}
 	}
 ?>
