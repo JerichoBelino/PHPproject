@@ -1,11 +1,16 @@
 <?php
 date_default_timezone_set("Etc/GMT+8");
 require_once 'class.php';
+require_once 'config.php';
+session_start();
 
 if (isset($_POST['save'])) {
     // Initialize the database connection
-    $db = new db_class();
-    if (!$db->conn) {
+    $database = new db_connect();
+    $db = $database->connect();
+    $user = new db_class($db);
+
+    if (!$user->getConnection()) {
         die("Database connection failed.");
     }
     $loan_id = $_POST['loan_id'];
@@ -24,9 +29,9 @@ if (isset($_POST['save'])) {
     }
     // Save the payment
     try {
-        $db->save_payment($loan_id, $payee, $payment, $penalty, $overdue);
+        $user->save_payment($loan_id, $payee, $payment, $penalty, $overdue);
         // Count payments made for this loan
-        $stmtCount = $db->conn->prepare("SELECT COUNT(*) AS count FROM `payment` WHERE `loan_id` = :loan_id");
+        $stmtCount = $user->getConnection()->prepare("SELECT COUNT(*) AS count FROM `payment` WHERE `loan_id` = :loan_id");
         $stmtCount->bindParam(':loan_id', $loan_id);
         $stmtCount->execute();
         $result = $stmtCount->fetch(PDO::FETCH_ASSOC);
@@ -34,7 +39,7 @@ if (isset($_POST['save'])) {
         // Check if the total payments made match the required number of months
         if ($count_pay === $month) {
             // Update loan status if all payments are completed
-            $stmtUpdate = $db->conn->prepare("UPDATE `loan` SET `status` = 3 WHERE `loan_id` = :loan_id");
+            $stmtUpdate = $user->getConnection()->prepare("UPDATE `loan` SET `status` = 3 WHERE `loan_id` = :loan_id");
             $stmtUpdate->bindParam(':loan_id', $loan_id);
             if (!$stmtUpdate->execute()) {
                 throw new Exception("Failed to update loan status.");

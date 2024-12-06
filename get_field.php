@@ -2,8 +2,12 @@
 date_default_timezone_set("Etc/GMT+8");
 require_once 'session.php';
 require_once 'class.php';
+require_once 'config.php';
+session_start();
 
-$db = new db_class();
+$database = new db_connect();
+$db = $database->connect();
+$user = new db_class($db);
 
 // Check if loan_id is set
 if (isset($_REQUEST['loan_id'])) {
@@ -14,7 +18,7 @@ if (isset($_REQUEST['loan_id'])) {
 }
 
 // Prepare and execute PDO query to fetch loan details
-$stmt = $db->conn->prepare("SELECT * FROM `loan` 
+$stmt = $user->getConnection()->prepare("SELECT * FROM `loan` 
     INNER JOIN `borrower` ON loan.borrower_id = borrower.borrower_id 
     INNER JOIN `loan_plan` ON loan.lplan_id = loan_plan.lplan_id 
     WHERE `loan_id` = :loan_id");
@@ -31,14 +35,14 @@ $penalty = $monthly * ($fetch['lplan_penalty'] / 100);
 $totalAmount = $fetch['amount'] + $monthly;
 
 // Fetch payment details using PDO
-$stmt_payment = $db->conn->prepare("SELECT * FROM `payment` WHERE `loan_id` = :loan_id");
+$stmt_payment = $user->getConnection()->prepare("SELECT * FROM `payment` WHERE `loan_id` = :loan_id");
 $stmt_payment->bindParam(':loan_id', $loan_id, PDO::PARAM_INT);
 $stmt_payment->execute();
 $paid = $stmt_payment->rowCount();
 $offset = $paid > 0 ? " OFFSET $paid" : "";
 
 // Fetch next due date using PDO
-$stmt_schedule = $db->conn->prepare("SELECT * FROM `loan_schedule` 
+$stmt_schedule = $user->getConnection()->prepare("SELECT * FROM `loan_schedule` 
     WHERE `loan_id` = :loan_id 
     ORDER BY date(due_date) ASC LIMIT 1 $offset");
 $stmt_schedule->bindParam(':loan_id', $loan_id, PDO::PARAM_INT);
