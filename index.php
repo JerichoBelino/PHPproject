@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/Login.css"> <!-- Link to the CSS file -->
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="script.js"></script> <!-- Include the reusable script -->
+    <script src="js/script.js"></script> <!-- Include the reusable script -->
 </head>
 
 <body>
