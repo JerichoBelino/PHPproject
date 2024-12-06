@@ -169,7 +169,7 @@ public function display_lplan() {
 	$query->execute();		
 	return $query->fetchAll(PDO::FETCH_ASSOC);
 }
-// Delete
+// Delete  
 public function delete_lplan($lplan_id) {
 	// Prepare the query
 	$query = $this->conn->prepare("DELETE FROM loan_plan WHERE lplan_id = :lplan_id");		

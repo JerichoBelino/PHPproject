@@ -91,7 +91,7 @@
 										<?php
 											$tbl_loan = $admin->display_loan();
 											$i=1;
-											foreach ($tbl_loan as $fetch)
+											foreach ($tbl_loan as $fetch){
 										?>
                                         <tr>
 											<td><?php echo $i++;?></td>
@@ -265,4 +265,141 @@
 											</div>
 										</div>
 
-									
+									<!-- Delete Loan -->		
+									<div class="modal fade" id="deleteborrower<?php echo $fetch['loan_id']?>" tabindex="-1" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header bg-danger">
+													<h5 class="modal-title text-white">System Information</h5>
+														<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">×</span>
+														</button>
+												</div>
+														<div class="modal-body">Are you sure you want to delete this record?</div>
+												<div class="modal-footer">
+														<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+														<a class="btn btn-danger" href="admin_deleteLoan.php?loan_id=<?php echo $fetch['loan_id']?>">Delete</a>
+												</div>
+											</div>
+										</div>
+									</div>
+										
+									<!-- View Payment Schedule -->
+									<div class="modal fade" id="viewSchedule<?php echo $fetch['loan_id']?>" tabindex="-1" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header bg-info">
+													<h5 class="modal-title text-white">Payment Schedule</h5>
+													<button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+												</div>
+												<div class="modal-body">
+													<div class="row">
+														<div class="col-md-5"><p>Reference No:</p><p><strong><?php echo $fetch['ref_no']?></strong></p></div>
+														<div class="col-md-7"><p>Name:</p><p><strong><?php echo $fetch['firstname']." ".substr($fetch['middlename'], 0, 1).". ".$fetch['lastname']?></strong></p></div>
+													</div><hr/>
+													<div class="container">
+														<div class="row"><div class="col-sm-6"><center>Months</center></div><div class="col-sm-6"><center>Monthly Payment</center></div></div><hr/>
+															<?php
+																if (isset($fetch['loan_id'])) {
+																	$scheduleData = $admin->getLoanSchedule($fetch['loan_id']);
+																	foreach ($scheduleData as $row): ?>
+																		<div class="row">
+																			<div class="col-sm-6 p-2 pl-5" style="border-right: 1px solid black; border-bottom: 1px solid black;">
+																				<strong><?= $row['due_date']; ?></strong>
+																			</div>
+																			<div class="col-sm-6 p-2 pl-5" style="border-bottom: 1px solid black;">
+																				<strong>&#8369; <?= number_format($monthly, 2); ?></strong>
+																			</div>
+																		</div>
+																	<?php endforeach; 
+																} else {
+																	echo "<p><small>Invalid Loan ID.</small></p>";
+																}
+															?>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+										<?php
+											}
+										?>
+                                    </tbody>
+                                </table>
+                            </div>
+						</div>
+                    </div>
+				</div>
+        </div>
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white">System Information</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Are you sure you want to logout?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" href="logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+	<script src="js/sb-admin-2.js"></script>
+	<!-- For computation -->
+	<script>
+		$(document).ready(function() {
+		$("#calcTable").hide();
+		$('.borrow, .loan').select2({ placeholder: 'Select an option' });
+		function calculateAmount(planSelector, amountSelector, tpa, mpa, pa) {
+    if ($(planSelector).val() == "" || $(amountSelector).val() == "") {
+        alert("Please enter a Loan Plan or Amount to Calculate");
+    } else {
+        var lplan = $(planSelector + " option:selected").text();
+        var [months, remainder] = lplan.split('months');
+        var [interest, penalty] = remainder.split('%').map(val => parseFloat(val.replace(/[^0-9.]/g, "")));
+        var amount = parseFloat($(amountSelector).val());
+        months = parseInt(months.trim(), 10); // Ensure months is an integer
+        // Calculate total payable amount
+        var totalInterest = amount * (interest / 100);
+        var totalAmount = amount + totalInterest;
+        // Calculate monthly payable amount
+        var monthly = totalAmount / months;
+        // Calculate penalty
+        var penaltyAmount = monthly * (penalty / 100);
+        // Display the results
+        $(tpa).text("\u20B1 " + totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $(mpa).text("\u20B1 " + monthly.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $(pa).text("\u20B1 " + penaltyAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $("#calcTable").show();
+    }
+}
+		$("#calculate").click(function() { calculateAmount("#lplan", "#amount", "#tpa", "#mpa", "#pa"); });
+		$("#updateCalculate").click(function() { calculateAmount("#ulplan", "#uamount", "#utpa", "#umpa", "#upa"); });
+		$('#dataTable').DataTable();
+	});
+	</script>
+
+</body>
+</html>
