@@ -351,6 +351,49 @@
 			return false; // Return false if the query execution fails
 		}
 
+		// for Update Loan (user)
+		public function getLoanDetails($user, $loan_id) {
+			$loanQuery = $this->conn->prepare("SELECT * FROM `loan` WHERE `loan_id` = :loan_id");
+			$loanQuery->bindParam(':loan_id', $loan_id, PDO::PARAM_INT);
+			$loanQuery->execute();
+			return $loanQuery->fetch(PDO::FETCH_ASSOC);
+		}
+		// Function to fetch loan plan details
+		public function getLoanPlanDetails($user, $lplan) {
+			$lplanQuery = $this->conn->prepare("SELECT * FROM `loan_plan` WHERE `lplan_id` = :lplan_id");
+			$lplanQuery->bindParam(':lplan_id', $lplan, PDO::PARAM_INT);
+			$lplanQuery->execute();
+			return $lplanQuery->fetch(PDO::FETCH_ASSOC);
+		}
+		// Function to create loan schedule
+		public function createLoanSchedule($user, $loan_id, $month) {
+			for ($i = 1; $i <= $month; $i++) {
+				$date_schedule = date("Y-m-d", strtotime("+$i month"));
+				$scheduleQuery = $this->conn->prepare("INSERT INTO `loan_schedule` (`loan_id`, `due_date`) VALUES (:loan_id, :due_date)");
+				$scheduleQuery->bindParam(':loan_id', $loan_id, PDO::PARAM_INT);
+				$scheduleQuery->bindParam(':due_date', $date_schedule, PDO::PARAM_STR);
+				$scheduleQuery->execute();
+			}
+		}
+		// Function to update loan details
+		public function updateLoanDetails($user, $loan_id, $borrower, $ltype, $lplan, $loan_amount, $purpose, $date_released) {
+			$updateQuery = $this->conn->prepare(
+				"UPDATE `loan` 
+				 SET `borrower_id` = :borrower, `ltype_id` = :ltype, `lplan_id` = :lplan, 
+					 `amount` = :loan_amount, `purpose` = :purpose, 
+					 `date_released` = :date_released 
+				 WHERE `loan_id` = :loan_id"
+			);
+			$updateQuery->bindParam(':borrower', $borrower, PDO::PARAM_INT);
+			$updateQuery->bindParam(':ltype', $ltype, PDO::PARAM_INT);
+			$updateQuery->bindParam(':lplan', $lplan, PDO::PARAM_INT);
+			$updateQuery->bindParam(':loan_amount', $loan_amount, PDO::PARAM_STR);
+			$updateQuery->bindParam(':purpose', $purpose, PDO::PARAM_STR);
+			$updateQuery->bindParam(':date_released', $date_released, PDO::PARAM_STR);
+			$updateQuery->bindParam(':loan_id', $loan_id, PDO::PARAM_INT);
+			$updateQuery->execute();
+		}
+
 		// Display
 		public function display_loan() {
 			// Query to get the loan data with JOINs
